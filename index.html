@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUMMA - Pastelería Artesanal</title>
+    <meta name="description" content="YUMMA - Pastelería colombiana especializada en pasteles de chocolate, vainilla y tres leches, además de panes tradicionales como pan de yuca y almojábana.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        :root {
+            --primary-pink: #F472B6;
+            --secondary-yellow: #FACC15;
+            --light-pink: #FCE7F3;
+            --light-yellow: #FEFCE8;
+        }
+        
+        .bg-primary-pink { background-color: var(--primary-pink); }
+        .bg-secondary-yellow { background-color: var(--secondary-yellow); }
+        .bg-light-pink { background-color: var(--light-pink); }
+        .bg-light-yellow { background-color: var(--light-yellow); }
+        .text-primary-pink { color: var(--primary-pink); }
+        .text-secondary-yellow { color: var(--secondary-yellow); }
+        
+        .gradient-pink-yellow {
+            background: linear-gradient(to right, var(--primary-pink), var(--secondary-yellow));
+        }
+        
+        .gradient-light {
+            background: linear-gradient(to right, var(--light-pink), var(--light-yellow));
+        }
+        
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 50;
+            background-color: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .whatsapp-button {
+                width: 56px;
+                height: 56px;
+                bottom: 16px;
+                right: 16px;
+            }
+            
+            .product-card {
+                margin-bottom: 16px;
+            }
+            
+            .category-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            h1 {
+                font-size: 2.5rem !important;
+            }
+            
+            h2 {
+                font-size: 2rem !important;
+            }
+        }
+        
+        /* Touch targets for mobile */
+        @media (hover: none) and (pointer: coarse) {
+            .category-btn {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .whatsapp-button {
+                min-height: 56px;
+                min-width: 56px;
+            }
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .category-btn {
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .category-btn.active {
+            background-color: var(--primary-pink);
+            color: white;
+        }
+        
+        .category-btn.inactive {
+            background-color: #F3F4F6;
+            color: #6B7280;
+        }
+        
+        .category-btn.inactive:hover {
+            background-color: var(--light-pink);
+        }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-white font-sans">
+    <!-- Header -->
+    <header class="gradient-pink-yellow py-8 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-2 drop-shadow-lg">YUMMA</h1>
+            <p class="text-xl text-white opacity-90">Pastelería Artesanal</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-center space-x-8 py-4">
+                <button id="btn-pasteles" class="category-btn active">
+                    Pasteles
+                </button>
+                <button id="btn-panes" class="category-btn inactive">
+                    Panes
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Pasteles Section -->
+        <section id="section-pasteles">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Nuestros Pasteles</h2>
+                <p class="text-lg text-gray-600">Deliciosos pasteles hechos con amor y los mejores ingredientes</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="pasteles-grid">
+                <!-- Pastel de Chocolate -->
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                         alt="Pastel de Chocolate" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Pastel de Chocolate</h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">
+                            Un delicioso pastel de chocolate húmedo con capas de crema de chocolate y cobertura de ganache. Perfecto para cualquier celebración especial.
+                        </p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Ingredientes:</h4>
+                            <p class="text-sm text-gray-600">
+                                Harina de trigo, chocolate premium, huevos frescos, mantequilla, azúcar, vainilla, polvo de hornear
+                            </p>
+                        </div>
+                        <div class="text-3xl font-bold text-primary-pink">
+                            $45.000
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pastel de Vainilla -->
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                         alt="Pastel de Vainilla" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Pastel de Vainilla</h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">
+                            Esponjoso pastel de vainilla con crema batida y decoraciones elegantes. Su sabor clásico lo convierte en el favorito de todas las edades.
+                        </p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Ingredientes:</h4>
+                            <p class="text-sm text-gray-600">
+                                Harina de trigo, extracto de vainilla pura, huevos frescos, mantequilla, azúcar, leche, polvo de hornear
+                            </p>
+                        </div>
+                        <div class="text-3xl font-bold text-primary-pink">
+                            $40.000
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pastel Tres Leches -->
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                         alt="Pastel Tres Leches" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Pastel Tres Leches</h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">
+                            Tradicional pastel empapado en la mezcla perfecta de tres leches y coronado con merengue suave. Una experiencia cremosa única.
+                        </p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Ingredientes:</h4>
+                            <p class="text-sm text-gray-600">
+                                Bizcocho de vainilla, leche condensada, leche evaporada, crema de leche, huevos, azúcar, merengue
+                            </p>
+                        </div>
+                        <div class="text-3xl font-bold text-primary-pink">
+                            $48.000
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panes Section -->
+        <section id="section-panes" class="hidden">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Nuestros Panes</h2>
+                <p class="text-lg text-gray-600">Panes frescos horneados diariamente con recetas tradicionales</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto" id="panes-grid">
+                <!-- Pan de Yuca -->
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                         alt="Pan de Yuca" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Pan de Yuca</h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">
+                            Tradicional pan colombiano hecho con almidón de yuca, queso fresco y huevos. Crujiente por fuera y suave por dentro, perfecto para acompañar el café.
+                        </p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Ingredientes:</h4>
+                            <p class="text-sm text-gray-600">
+                                Almidón de yuca, queso fresco campesino, huevos frescos, mantequilla, sal, polvo de hornear
+                            </p>
+                        </div>
+                        <div class="text-3xl font-bold text-primary-pink">
+                            $8.000
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Almojábana -->
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                         alt="Almojábana" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Almojábana</h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">
+                            Delicioso pan de forma circular con un sabor único gracias a la combinación de harina de maíz y queso. Ideal para el desayuno o la merienda.
+                        </p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Ingredientes:</h4>
+                            <p class="text-sm text-gray-600">
+                                Harina de maíz precocida, queso cuajada, huevos frescos, mantequilla, azúcar, sal, polvo de hornear
+                            </p>
+                        </div>
+                        <div class="text-3xl font-bold text-primary-pink">
+                            $9.000
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- WhatsApp Float Button -->
+    <button class="whatsapp-button" onclick="openWhatsApp()" aria-label="Contactar por WhatsApp">
+        <i data-lucide="message-circle" class="w-8 h-8 text-white"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="gradient-light py-12 mt-20">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">YUMMA</h3>
+            <p class="text-gray-600 mb-6">Endulzando tus momentos especiales desde el corazón</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-8 text-sm text-gray-500">
+                <span>📍 Calle 123 #45-67, Bogotá</span>
+                <span>📞 (+57) 324 299 2676</span>
+                <span>📧 pedidos@yumma.com</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Category switching functionality
+        const btnPasteles = document.getElementById('btn-pasteles');
+        const btnPanes = document.getElementById('btn-panes');
+        const sectionPasteles = document.getElementById('section-pasteles');
+        const sectionPanes = document.getElementById('section-panes');
+
+        function showPasteles() {
+            btnPasteles.classList.add('active');
+            btnPasteles.classList.remove('inactive');
+            btnPanes.classList.add('inactive');
+            btnPanes.classList.remove('active');
+            
+            sectionPasteles.classList.remove('hidden');
+            sectionPanes.classList.add('hidden');
+        }
+
+        function showPanes() {
+            btnPanes.classList.add('active');
+            btnPanes.classList.remove('inactive');
+            btnPasteles.classList.add('inactive');
+            btnPasteles.classList.remove('active');
+            
+            sectionPanes.classList.remove('hidden');
+            sectionPasteles.classList.add('hidden');
+        }
+
+        btnPasteles.addEventListener('click', showPasteles);
+        btnPanes.addEventListener('click', showPanes);
+
+        // WhatsApp functionality optimized for mobile and desktop
+        function openWhatsApp() {
+            const phoneNumber = "3242992676";
+            const message = encodeURIComponent("¡Hola! Me interesa conocer más sobre sus productos de YUMMA 🧁");
+            
+            // Enhanced mobile detection
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                            (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) || 
+                            window.matchMedia("(max-width: 768px)").matches;
+            
+            let whatsappUrl;
+            
+            if (isMobile) {
+                // For mobile devices - try app first, fallback to web
+                whatsappUrl = `https://api.whatsapp.com/send?phone=57${phoneNumber}&text=${message}`;
+                
+                // Create a temporary link and click it to handle app/web fallback
+                const link = document.createElement('a');
+                link.href = whatsappUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Fallback to web version after delay if app doesn't open
+                setTimeout(() => {
+                    if (document.visibilityState === 'visible') {
+                        const webUrl = `https://web.whatsapp.com/send?phone=57${phoneNumber}&text=${message}`;
+                        window.open(webUrl, '_blank', 'noopener,noreferrer');
+                    }
+                }, 2000);
+                
+            } else {
+                // For desktop - direct to web version
+                whatsappUrl = `https://web.whatsapp.com/send?phone=57${phoneNumber}&text=${message}`;
+                window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+            }
+        }
+        
+        // Add touch feedback for mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const whatsappBtn = document.querySelector('.whatsapp-button');
+            
+            whatsappBtn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            whatsappBtn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
